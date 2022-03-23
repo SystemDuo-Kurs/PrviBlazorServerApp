@@ -1,0 +1,24 @@
+﻿@page "/nasa"
+@using Data
+@inject ProbniServis Ps
+
+
+
+<h3>Nasa</h3>
+
+<MudButton Variant="Variant.Filled">Default</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Primary">Primary</MudButton>
+<MudButton Variant="Variant.Filled" Color="Color.Secondary">Secondary</MudButton>
+<MudButton Variant="Variant.Filled" Disabled="true">Disabled</MudButton>
+
+
+@for(int i =0; i < 10; i++)
+{
+    <b>@Ps.Sabiranje(i, i)</b><br/>
+}
+
+
+@code 
+{
+
+}
