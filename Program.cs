@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using PrviBlazorServerApp;
 using Microsoft.EntityFrameworkCore;
 using PrviBlazorServerApp.Data.Services;
+using PrviBlazorServerApp.Data.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<Db>(opcije =>
 builder.Services.AddTransient<WeatherForecastService>();
 builder.Services.AddTransient<ProbniServis>();
 builder.Services.AddTransient<Person>();
+builder.Services.AddTransient<PersonList>();
+builder.Services.AddTransient<PersonEdit>();
 
 var app = builder.Build();
 

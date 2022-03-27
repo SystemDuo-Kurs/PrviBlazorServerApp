@@ -1,33 +1,53 @@
 ﻿@page "/nasa"
 @using Data
+@using PrviBlazorServerApp.Data.Models
 @inject ProbniServis Ps
-@inject Data.Services.Person PersonService
-
-
+@inject Data.ViewModels.PersonList PersonListVM
+@inject Data.ViewModels.PersonEdit PersonEditVM
 
 <h3>Nasa</h3>
 
-<MudTable Items="PersonService.GetAll()">
+<MudTable Items="PersonListVM.People">
     <HeaderContent>
-        <MudTh>Id</MudTh>
         <MudTh>Name</MudTh>
         <MudTh>Surname</MudTh>
+        <MudTh>Delete</MudTh>
+        <MudTh>Update</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd>@context.Id</MudTd>
         <MudTd>@context.Name</MudTd>
         <MudTd>@context.Surname</MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Rounded.DeleteForever" @onclick="()=>Delete(context)"/>
+        </MudTd>
+        <MudTd>
+            <MudIconButton Icon="@Icons.Rounded.Edit" @onclick="()=>PersonEditVM.Person = context" />
+        </MudTd>
     </RowTemplate>
 </MudTable>
 
-
-@for(int i =0; i < 10; i++)
-{
-    <b>@Ps.Sabiranje(i, i)</b><br/>
-}
+<MudForm Model=PersonEditVM.Person>
+    <MudTextField T="string" Label="Name" @bind-Value=PersonEditVM.Person.Name/>
+    <MudTextField T="string" Label="Surname" @bind-Value=PersonEditVM.Person.Surname/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick=SaveAsync>Snimi</MudButton>
+</MudForm> 
 
 
 @code 
 {
-
+    public void Delete(Person person)
+    {
+        PersonListVM.Delete(person);
+        Refresh();
+    }
+    public async Task SaveAsync()
+    {
+        await PersonEditVM.SaveAsync();
+        Refresh();
+    }
+    private void Refresh()
+    {
+        PersonListVM.GetAll();
+        StateHasChanged();
+    }
 }
