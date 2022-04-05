@@ -15,7 +15,10 @@ namespace PrviBlazorServerApp.Data.ViewModels
             People = _personService.GetAll();
         }
 
-        public void GetAll() => People = _personService.GetAll();
-        public void Delete(Models.Person person) => _personService.Delete(person);
+        public void GetAll()
+        {
+            People = _personService.GetAll();
+        }
+        public async Task Delete(Models.Person person) => await _personService.Delete(person);
     }
 }

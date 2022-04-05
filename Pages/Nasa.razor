@@ -1,9 +1,10 @@
 ﻿@page "/nasa"
 @using Data
 @using PrviBlazorServerApp.Data.Models
-@inject ProbniServis Ps
+@using Microsoft.AspNetCore.SignalR.Client
 @inject Data.ViewModels.PersonList PersonListVM
 @inject Data.ViewModels.PersonEdit PersonEditVM
+@inject Data.Services.SignalR SignalRserv
 
 <h3>Nasa</h3>
 
@@ -35,9 +36,17 @@
 
 @code 
 {
-    public void Delete(Person person)
+    protected override async Task OnInitializedAsync()
     {
-        PersonListVM.Delete(person);
+        SignalRserv.HC.On("bilaPromena",async () =>
+            {
+                PersonListVM.GetAll();
+                await base.InvokeAsync(() => StateHasChanged());
+            });
+    }
+    public async Task Delete(Person person)
+    {
+        await PersonListVM.Delete(person);
         Refresh();
     }
     public async Task SaveAsync()

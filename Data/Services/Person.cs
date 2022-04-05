@@ -1,12 +1,16 @@
-﻿namespace PrviBlazorServerApp.Data.Services
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace PrviBlazorServerApp.Data.Services
 {
     public class Person
     {
         private Db _baza;
+        private IHubContext<CrudHub> _crudHub;
 
-        public Person(Db baza)
+        public Person(Db baza, IHubContext<CrudHub> crudHub)
         {
             _baza = baza;
+            _crudHub = crudHub;
         }
 
         public List<Models.Person> GetAll()
@@ -21,12 +25,14 @@
         {
             _baza.Update(person);
             await _baza.SaveChangesAsync();
+            await _crudHub.Clients.All.SendAsync("bilaPromena");
         }
 
-        public void Delete(Models.Person person)
+        public async Task Delete(Models.Person person)
         {
             _baza.Remove(person);
-            _baza.SaveChanges();
+            await _baza.SaveChangesAsync();
+            await _crudHub.Clients.All.SendAsync("bilaPromena");
         }
     }
 }
